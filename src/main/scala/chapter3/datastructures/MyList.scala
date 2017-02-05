@@ -28,6 +28,12 @@ object List {
     case Cons(x, xs) => f(x, foldRight(xs, z)(f))
   }
 
+  @tailrec
+  def foldLeft[A, B](l: List[A], z: B)(f: (A, B) => B): B = l match {
+    case Nil => z
+    case Cons(x, xs) => foldLeft(xs, f(x, z))(f)
+  }
+
   def sum2(l: List[Int]) = foldRight(l, 0)((x, y) => x + y)
 
   def product2(l: List[Double]) = foldRight(l, 1.0)((x, y) => x * y)
@@ -71,6 +77,24 @@ object List {
     case Nil => Nil
     case Cons(_, Nil) => Nil
     case Cons(head, tail) => Cons(head, init(tail))
+  }
+
+  def length[A](list: List[A]): Int = {
+    foldRight(list, 0)((_, b: Int) => b + 1)
+  }
+
+  def reverse[A](l: List[A]) = {
+    foldLeft(l, Nil: List[A])((x, xs) => Cons(x, xs))
+  }
+
+  def foldLeftByR[A, B](l: List[A], z: B)(f: (A, B) => B): B = l match {
+    case Nil => z
+    case Cons(head, Nil) => foldRight(Nil, f(head, z))(f)
+    case Cons(head, tail) => foldLeftByR(tail, f(head, z))(f)
+  }
+
+  def concat[A](list: List[List[A]]): List[A] = {
+    foldRight(list, Nil: List[A])((oneList, acc) => foldRight(oneList, acc)((a, b) => Cons(a, b)))
   }
 }
 

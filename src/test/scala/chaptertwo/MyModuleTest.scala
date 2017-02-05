@@ -2,7 +2,8 @@ package chaptertwo
 
 import org.scalatest.FunSuite
 import MyModule._
-import chapter3.datastructures.Cons
+import chapter3.datastructures.{List, _}
+import chapter3.datastructures.List._
 
 /**
   * Created by Kirill on 1/30/2017.
@@ -47,6 +48,7 @@ class MyModuleTest extends FunSuite {
   }
 
   test("drop ,while, iniit") {
+    import chapter3.datastructures.Cons
     import chapter3.datastructures.List._
     import chapter3.datastructures.Nil
 
@@ -58,5 +60,44 @@ class MyModuleTest extends FunSuite {
 
     val inited = init(Cons("ab", Cons("cd", Cons("kj", Nil))))
     assert(inited == Cons("ab", Cons("cd", Nil)))
+  }
+
+  /*
+    test("foldRight with Ni and Cons"){
+      import chapter3.datastructures.Cons
+      import chapter3.datastructures.List._
+      import chapter3.datastructures.Nil
+
+      val tested = foldRight(chapter3.datastructures.List(1,2,3),Nil:List[Int])(Cons(_,_))
+    }
+  */
+
+  test("length") {
+    val tested = length(List(1, 2, 3))
+    assert(tested === 3)
+    assert(length(List("as", "opo", "iioip", "iop")) === 4)
+  }
+
+  test("foldLeft") {
+    val fl = foldLeft(List(1, 1, 1), 0)((a, b) => a + b)
+    assert(fl === 3)
+  }
+
+  test("reverse") {
+    assert(reverse(List(1, 2, 3)) == List(3, 2, 1))
+  }
+
+  test("foldLeftByR") {
+    val l = List(2, 3, 4)
+    val normalL = foldLeft(l, 0)((a, b) => a - b)
+    val normalR = foldRight(l, 0)((a, b) => a - b)
+    assert(normalL == 3)
+    assert(normalR == 3)
+    assert(foldLeftByR(l, 0)((a, b) => a - b) == normalL)
+  }
+
+  test("concat") {
+    val concated = concat(List(List(1, 2, 3), List(8, 9, 0)))
+    assert(concated === List(1, 2, 3, 8, 9, 0))
   }
 }
